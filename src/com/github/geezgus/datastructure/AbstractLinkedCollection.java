@@ -60,7 +60,7 @@ abstract class AbstractLinkedCollection<T> extends AbstractCollection<T> {
     }
 
     protected void includeHeadNode(T item) {
-        if (size() == 0) {
+        if (isEmpty()) {
             includeFirstNode(item);
             return;
         }
@@ -71,7 +71,7 @@ abstract class AbstractLinkedCollection<T> extends AbstractCollection<T> {
     }
 
     protected void includeTailNode(T item) {
-        if (size() == 0) {
+        if (isEmpty()) {
             includeFirstNode(item);
             return;
         }
@@ -83,7 +83,7 @@ abstract class AbstractLinkedCollection<T> extends AbstractCollection<T> {
 
     @Override
     public String toString() {
-        if (size() == 0) {
+        if (isEmpty()) {
             return "[]";
         }
 

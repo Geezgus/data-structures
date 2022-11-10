@@ -19,7 +19,7 @@ public class LinkedList<T> extends AbstractLinkedCollection<T> implements List<T
     public void insert(int index, T item) throws IndexOutOfBoundsException {
         assertIndexIsSettable(index);
 
-        if (isEmpty()) {
+        if (index == 0) {
             includeHeadNode(item);
             return;
         }
@@ -80,7 +80,6 @@ public class LinkedList<T> extends AbstractLinkedCollection<T> implements List<T
 
     @Override
     public void set(int index, T item) throws IndexOutOfBoundsException {
-        assertIndexIsGettable(index);
         Node<T> temp = getListNode(index);
         temp.item = item;
     }

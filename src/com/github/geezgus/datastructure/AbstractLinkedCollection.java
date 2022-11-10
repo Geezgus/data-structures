@@ -99,7 +99,6 @@ abstract class AbstractLinkedCollection<T> extends AbstractCollection<T> {
         temp = new Node<>(temp.previous, item, temp);
         temp.previous.next = temp;
         temp.next.previous = temp;
-
         size++;
     }
 

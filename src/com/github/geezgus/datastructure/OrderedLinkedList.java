@@ -12,19 +12,27 @@ public class OrderedLinkedList<T> extends AbstractLinkedList<T> implements List<
 
     @Override
     public boolean add(T item) {
-        int index = 0;
-        while (index < size()) {
-            if (comparator.compare(item, get(index)) <= 0)
-                break;
-            index++;
-        }
+        int index = getInsertionIndexOfItem(item);
 
         try {
             includeNodeAt(index, item);
         } catch (Exception ignored) {
             return false;
         }
+        
         return true;
+    }
+
+    private int getInsertionIndexOfItem(T item) {
+        int index = 0;
+
+        while (index < size()) {
+            if (comparator.compare(item, get(index)) <= 0)
+                break;
+            index++;
+        }
+
+        return index;
     }
 
     @Override

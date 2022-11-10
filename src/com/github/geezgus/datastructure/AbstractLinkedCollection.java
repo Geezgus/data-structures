@@ -81,6 +81,39 @@ abstract class AbstractLinkedCollection<T> extends AbstractCollection<T> {
         size++;
     }
 
+    protected void includeNodeAt(int index, T item) {
+        assertIndexIsSettable(index);
+
+        if (index == 0) {
+            includeHeadNode(item);
+            return;
+        }
+
+        if (index == size()) {
+            includeTailNode(item);
+            return;
+        }
+
+        Node<T> temp = getNodeAt(index);
+
+        temp = new Node<>(temp.previous, item, temp);
+        temp.previous.next = temp;
+        temp.next.previous = temp;
+
+        size++;
+    }
+
+    protected Node<T> getNodeAt(int index) throws IndexOutOfBoundsException {
+        assertIndexIsGettable(index);
+
+        Node<T> temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+
+        return temp;
+    }
+
     @Override
     public String toString() {
         if (isEmpty()) {

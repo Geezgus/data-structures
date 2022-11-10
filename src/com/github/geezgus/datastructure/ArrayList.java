@@ -1,7 +1,7 @@
 package com.github.geezgus.datastructure;
 
 @SuppressWarnings("unchecked")
-public class ArrayList<T> extends AbstractArrayCollection<T> implements List<T> {
+public class ArrayList<T> extends AbstractArrayCollection<T> implements UnorderedList<T> {
 
     public ArrayList() {
         super();

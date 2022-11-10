@@ -13,15 +13,7 @@ public interface List<T> extends Collection<T> {
      * @param item The object to add to the List<T>.
      * @return true if the item was successfully added to the List<T>; otherwise, false.
      */
-    default boolean add(T item) {
-        try {
-            insert(size(), item);
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
+    boolean add(T item);
 
     /**
      * Determines the index of a specific item in the List<T>.
@@ -30,15 +22,6 @@ public interface List<T> extends Collection<T> {
      * @return The index of item if found in the list; otherwise, -1.
      */
     int indexOf(T item);
-
-    /**
-     * Inserts an item to the List<T> at the specified index.
-     *
-     * @param index The zero-based index at which item should be inserted.
-     * @param item  The object to insert into the List<T>.
-     * @throws IndexOutOfBoundsException If the position of the List<T> indicated by the provided index is not settable.
-     */
-    void insert(int index, T item) throws IndexOutOfBoundsException;
 
     /**
      * Returns the item in the List<T> at the specified index.

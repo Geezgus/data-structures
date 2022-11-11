@@ -29,5 +29,5 @@ bin/
 .DS_Store
 
 ### Helper utilities ###
-src/input.txt
-src/Main.java
+src/main/input.txt
+src/main/Main.java

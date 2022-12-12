@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class BinarySearchTree<T> {
     public Comparator<T> comparator;
-    public int searchLimit = 1;
+    public int maxElementsToString = 1;
     protected Node<T> root = null;
 
     public BinarySearchTree(Comparator<T> comparator) {
@@ -74,17 +74,16 @@ public class BinarySearchTree<T> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        buildStringInOrder(root, sb, 0);
+        buildStringInOrder(root, sb);
         return sb.toString().replaceFirst("\n$", "");
     }
 
-    private void buildStringInOrder(Node<T> root, StringBuilder builder, int resultNumber) {
-        if (root == null || resultNumber > searchLimit) return;
-        int number = resultNumber;
+    private void buildStringInOrder(Node<T> root, StringBuilder builder) {
+        if (root == null) return;
 
-        buildStringInOrder(root.left, builder, ++number);
+        buildStringInOrder(root.left, builder);
         builder.append(root.value).append("\n");
-        buildStringInOrder(root.right, builder, ++number);
+        buildStringInOrder(root.right, builder);
     }
     //endregion
 

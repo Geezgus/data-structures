@@ -135,10 +135,12 @@ public class Player {
                 sb.append("'").append(getFields().get(i).fieldValue).append("'");
             }
 
-            sb.append(", ");
+            if (i < getFields().size() - 1) {
+                sb.append(", ");
+            }
         }
 
-        return sb.append("\b\b}").toString();
+        return sb.append("}").toString();
     }
 
     final static class PlayerField {

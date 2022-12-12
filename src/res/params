@@ -1,0 +1,21 @@
+# in_path and out_path must be csv files
+# fields should not have spaces separating them
+# order_by birth_date will compare the date numerically, instead of chronologically
+
+# csv file
+[in_path] src/res/fifa_cleaned.csv
+
+# csv file
+[out_path] out/so_fifa.csv
+
+# comma-separated-values
+[fields] id,age,name,international_reputation(1-5),national_team_position,LCB
+
+# !(date (yyyy-mm-dd))
+[order_by] national_team_position
+
+# boolean
+[ascending] false
+
+# integer
+[limit] 18

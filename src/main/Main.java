@@ -1,62 +1,72 @@
 import com.github.geezgus.datastructure.BinarySearchTree;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
+        //region Load parameters
         IOParams params;
         try {
-            params = new IOParams(new File("src/main/params"));
+            params = new IOParams(new File("src/res/params"));
             System.out.println("Parameter file open successfully.");
         } catch (FileNotFoundException e) {
-            System.out.println("Could not read.");
+            System.err.printf("Could not read %s.%n", "src/res/params");
             return;
         }
+        //endregion
 
+        //region Prepare tree
         BinarySearchTree<Player> tree = new BinarySearchTree<>((o1, o2) -> {
             if (params.ascending) return o1.getField(params.orderBy).compareTo(o2.getField(params.orderBy));
             else return o2.getField(params.orderBy).compareTo(o1.getField(params.orderBy));
         });
-
-        tree.searchLimit = params.limit;
-
-        //region Add Mock Players To Tree
-        Player p1 = new Player()
-                .setField("name", "Vini. Jr")
-                .setField("birth_date", "2000-07-12")
-                .setField("full_name", "Vinícius José Paixão de Oliveira Júnior")
-                .setField("age", "22")
-                .setField("id", "123");
-
-        Player p2 = new Player()
-                .setField("name", "Neymar")
-                .setField("birth_date", "1992-02-05")
-                .setField("full_name", "Neymar da Silva Santos Júnior")
-                .setField("age", "30")
-                .setField("id", "789");
-
-        Player p3 = new Player()
-                .setField("name", "Richarlison")
-                .setField("birth_date", "1997-05-10")
-                .setField("full_name", "Richarlison de Andrade")
-                .setField("age", "25")
-                .setField("id", "456");
-
-        tree.add(p1);
-        tree.add(p2);
-        tree.add(p3);
+        tree.maxElementsToString = params.limit;
         //endregion
 
-        String[] results = tree.toString().split("\n");
+        //region Read input
+        try (FileReader fr = new FileReader(params.inPath)) {
+            BufferedReader bufferedReader = new BufferedReader(fr);
 
-        try {
-            FileWriter fw = new FileWriter(params.outPath);
+            String headRow = bufferedReader.readLine();
+            String[] columnNames = headRow.split(",");
 
+            //region Load tree
+            while (true) {
+                String row = bufferedReader.readLine();
+                if (row == null) break;
+
+                String[] columnValues = row.split(",(?=(?:[^\"\\n]*\"[^\"\\n]*\")*[^\"\\n]*$)");
+
+                Player player = new Player();
+                for (int i = 0; i < columnValues.length; i++) {
+                    String column = columnNames[i];
+
+                    player.setField(column, columnValues[i]);
+                }
+                tree.add(player);
+            }
+            System.out.println("Tree successfully loaded.");
+            //endregion
+
+            System.out.println("Input file read successfully.");
+        } catch (IOException e) {
+            System.err.printf("Could not read %s.%n", params.inPath);
+            return;
+        }
+        //endregion
+
+        //region Limit results
+        String[] splitTree = tree.toString().split("\n");
+        String[] results = new String[params.limit];
+        for (int i = 0; i < splitTree.length && i < results.length; i++) {
+            results[i] = splitTree[i];
+        }
+        //endregion
+
+        //region Write output
+        try (FileWriter fw = new FileWriter(params.outPath)) {
             fw.write(getCsvHeadRow(params.fields));
 
             for (String result : results) {
@@ -67,9 +77,10 @@ public class Main {
             fw.flush();
             System.out.println("Output file written successfully.");
         } catch (IOException e) {
-            System.err.println("Could not write.");
+            System.err.printf("Could not write %s.%n", params.outPath);
             return;
         }
+        //endregion
     }
 
     private static String getCsvHeadRow(String[] fieldNames) {
@@ -92,7 +103,7 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < fieldNames.length; i++) {
-            Pattern pattern = Pattern.compile(fieldNames[i] + ": '(.*?)'");
+            Pattern pattern = Pattern.compile(Pattern.quote(fieldNames[i])+": '(.*?)'");
             Matcher matcher = pattern.matcher(playerString);
 
             if (matcher.find()) {
